@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Blood Inventory</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+    <header class="header">
+
+        <div class="logo">
+            <div class="logo-icon">🩸</div>
+            <h2>BLOOD<span>BANK</span></h2>
+        </div>
+
+        <div class="profile">
+            <div><strong>Administrator</strong></div>
+            <div class="avatar">A</div>
+        </div>
+
+    </header>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+			<p class="menu-title">MAIN MENU</p>
+
+			<a th:href="@{/}" class="menu-item">▦ Dashboard</a>
+
+			<a th:href="@{/donors}" class="menu-item">♙ Donor Management</a>
+
+
+			<a th:href="@{/inventory}" class="menu-item">🩸 Blood Inventory</a>
+
+			<a th:href="@{/requests}" class="menu-item">♡ Blood Requests</a>
+
+			<a th:href="@{/donations}" class="menu-item">▤ Donation History</a>
+
+			<p class="menu-title">ANALYTICS</p>
+
+			<a th:href="@{/reports}" class="menu-item">▥ Reports & Analytics</a>
+
+			<p class="menu-title">SYSTEM</p>
+
+			
+
+			<form th:action="@{/logout}" method="post">
+			    <button type="submit" class="menu-item"
+			            style="width:100%; border:none; cursor:pointer; text-align:left;">
+			        ↪ Logout
+			    </button>
+			</form>
+
+        </aside>
+
+        <main class="main">
+
+            <section class="welcome">
+
+                <div>
+                    <h1>Blood Inventory</h1>
+                    <p>Monitor available blood stock and expiry information.</p>
+                </div>
+
+            </section>
+			
+			<section class="inventory-summary">
+
+			    <div class="inventory-summary-card">
+			        <div class="summary-icon">🩸</div>
+			        <div>
+			            <p>A+ Blood</p>
+			            <h2 th:text="${bloodSummary['A+'] ?: 0} + ' Units'">0 Units</h2>
+			        </div>
+			    </div>
+
+			    <div class="inventory-summary-card">
+			        <div class="summary-icon">🩸</div>
+			        <div>
+			            <p>A- Blood</p>
+			            <h2 th:text="${bloodSummary['A-'] ?: 0} + ' Units'">0 Units</h2>
+			        </div>
+			    </div>
+
+			    <div class="inventory-summary-card">
+			        <div class="summary-icon">🩸</div>
+			        <div>
+			            <p>B+ Blood</p>
+			            <h2 th:text="${bloodSummary['B+'] ?: 0} + ' Units'">0 Units</h2>
+			        </div>
+			    </div>
+
+			    <div class="inventory-summary-card">
+			        <div class="summary-icon">🩸</div>
+			        <div>
+			            <p>B- Blood</p>
+			            <h2 th:text="${bloodSummary['B-'] ?: 0} + ' Units'">0 Units</h2>
+			        </div>
+			    </div>
+
+			    <div class="inventory-summary-card">
+			        <div class="summary-icon">🩸</div>
+			        <div>
+			            <p>O+ Blood</p>
+			            <h2 th:text="${bloodSummary['O+'] ?: 0} + ' Units'">0 Units</h2>
+			        </div>
+			    </div>
+
+			    <div class="inventory-summary-card">
+			        <div class="summary-icon">🩸</div>
+			        <div>
+			            <p>O- Blood</p>
+			            <h2 th:text="${bloodSummary['O-'] ?: 0} + ' Units'">0 Units</h2>
+			        </div>
+			    </div>
+
+			    <div class="inventory-summary-card">
+			        <div class="summary-icon">🩸</div>
+			        <div>
+			            <p>AB+ Blood</p>
+			            <h2 th:text="${bloodSummary['AB+'] ?: 0} + ' Units'">0 Units</h2>
+			        </div>
+			    </div>
+
+			    <div class="inventory-summary-card">
+			        <div class="summary-icon">🩸</div>
+			        <div>
+			            <p>AB- Blood</p>
+			            <h2 th:text="${bloodSummary['AB-'] ?: 0} + ' Units'">0 Units</h2>
+			        </div>
+			    </div>
+				
+				<div class="inventory-summary-card">
+				    <h3>Total Blood Stock</h3>
+				    <h2 th:text="${totalUnits} + ' Units'">0 Units</h2>
+				    <p>Combined available stock</p>
+				</div>
+
+			</section>
+
+            <section class="panel inventory-form-panel">
+
+                <h2>Add Blood Stock</h2>
+
+                <p>Enter the details of a collected blood stock batch.</p>
+
+                <form class="inventory-form"
+                      th:action="@{/inventory/add}"
+                      method="post">
+
+                    <div class="form-grid">
+
+                        <div>
+                            <label>Blood Group</label>
+
+                            <select name="bloodGroup" required>
+                                <option value="">Select Blood Group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Units Available</label>
+
+                            <input type="number"
+                                   name="unitsAvailable"
+                                   min="1"
+                                   placeholder="Enter number of units"
+                                   required>
+                        </div>
+
+                        <div>
+                            <label>Collection Date</label>
+
+                            <input type="date"
+                                   name="collectionDate"
+                                   required>
+                        </div>
+
+                        <div>
+                            <label>Expiry Date</label>
+
+                            <input type="date"
+                                   name="expiryDate"
+                                   required>
+                        </div>
+
+                    </div>
+
+                    <button type="submit">Add Blood Stock</button>
+
+                </form>
+
+            </section>
+
+            <section class="panel inventory-list-panel">
+
+                <div class="inventory-list-header">
+
+                    <div>
+                        <h2>Available Blood Stock</h2>
+                        <p>Overview of all recorded blood stock batches.</p>
+                    </div>
+
+                    <span class="inventory-count"
+                          th:text="${#lists.size(inventoryList)} + ' Records'">
+                        0 Records
+                    </span>
+
+                </div>
+				
+				<div class="inventory-filters">
+
+				    <div>
+				        <label for="bloodGroupFilter">Blood Group</label>
+				        <select id="bloodGroupFilter">
+				            <option value="">All Blood Groups</option>
+				            <option value="A+">A+</option>
+				            <option value="A-">A-</option>
+				            <option value="B+">B+</option>
+				            <option value="B-">B-</option>
+				            <option value="O+">O+</option>
+				            <option value="O-">O-</option>
+				            <option value="AB+">AB+</option>
+				            <option value="AB-">AB-</option>
+				        </select>
+				    </div>
+
+				    <div>
+				        <label for="expiryFilter">Expiry Status</label>
+				        <select id="expiryFilter">
+				            <option value="">All Statuses</option>
+				            <option value="valid">Valid</option>
+				            <option value="expiring-soon">Expiring Soon</option>
+				            <option value="expired">Expired</option>
+				        </select>
+				    </div>
+
+				</div>
+
+                <div class="table-container">
+
+
+					<table class="inventory-table">
+
+					    <thead>
+					        <tr>
+					            <th>ID</th>
+					            <th>Blood Group</th>
+					            <th>Units Available</th>
+					            <th>Collection Date</th>
+					            <th>Expiry Date</th>
+					            <th>Expiry Status</th>
+					            <th>Days Remaining</th>
+								<th>Actions</th>
+					        </tr>
+					    </thead>
+
+
+						<tbody>
+
+						    <tr th:each="item : ${inventoryList}">
+
+						        <td th:text="${item.inventoryId}"></td>
+
+						        <td>
+						            <span class="blood-badge"
+						                  th:text="${item.bloodGroup}">
+						            </span>
+						        </td>
+
+						        <td th:text="${item.unitsAvailable}"></td>
+
+						        <td th:text="${item.collectionDate}"></td>
+
+						        <td th:text="${item.expiryDate}"></td>
+
+						        <td>
+						            <span class="expiry-badge"
+						                  th:classappend="${item.expiryDate.isBefore(today)} ? ' expired' :
+						                  (${item.expiryDate.isBefore(today.plusDays(8))} ? ' expiring-soon' : ' valid')"
+						                  th:text="${item.expiryDate.isBefore(today)} ? 'Expired' :
+						                  (${item.expiryDate.isBefore(today.plusDays(8))} ? 'Expiring Soon' : 'Valid')">
+						            </span>
+						        </td>
+
+						        <td>
+						            <span th:if="${item.daysUntilExpiry > 1}"
+						                  th:text="|Expires in ${item.daysUntilExpiry} days|">
+						            </span>
+
+						            <span th:if="${item.daysUntilExpiry == 1}">
+						                Expires tomorrow
+						            </span>
+
+						            <span th:if="${item.daysUntilExpiry == 0}">
+						                Expires today
+						            </span>
+
+						            <span th:if="${item.daysUntilExpiry < 0}"
+						                  th:text="|Expired ${-item.daysUntilExpiry} days ago|">
+						            </span>
+						        </td>
+
+						        <td>
+						            <a th:href="@{/inventory/edit/{id}(id=${item.inventoryId})}"
+						               class="edit-btn">
+						                Edit
+						            </a>
+
+						            <form th:action="@{/inventory/delete/{id}(id=${item.inventoryId})}"
+						                  method="post"
+						                  style="display:inline;"
+						                  onsubmit="return confirm('Are you sure you want to delete this inventory record?');">
+
+						                <button type="submit" class="delete-btn">
+						                    Delete
+						                </button>
+
+						            </form>
+						        </td>
+
+						    </tr>
+
+						    <tr th:if="${#lists.isEmpty(inventoryList)}">
+						        <td colspan="8" class="empty-message">
+						            No blood stock records available yet.
+						        </td>
+						    </tr>
+
+						</tbody>
+
+
+					</table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+	
+	<script th:src="@{/js/inventory.js}"></script>
+
+</body>
+</html>

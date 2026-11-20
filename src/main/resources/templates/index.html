@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="refresh" content="30">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Bank Management System</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+	
+</head>
+
+
+<body>
+
+    <header class="header">
+
+        <div class="logo">
+            <div class="logo-icon">🩸</div>
+            <h2>BLOOD<span>BANK</span></h2>
+        </div>
+
+        <div class="profile">
+            <div>
+                <strong>Administrator</strong>
+            </div>
+            <div class="avatar">A</div>
+        </div>
+
+    </header>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <p class="menu-title">MAIN MENU</p>
+
+			<a th:href="@{/}" class="menu-item active">▦ Dashboard</a>
+			<a th:href="@{/donors}" class="menu-item">♙ Donor Management</a>
+			<a th:href="@{/inventory}" class="menu-item">🩸 Blood Inventory</a>
+			<a th:href="@{/requests}" class="menu-item">♡ Blood Requests</a>
+            <a th:href="@{/donations}" class="menu-item">▤ Donation History</a>
+
+            <p class="menu-title">ANALYTICS</p>
+
+            <a th:href="@{/reports}" class="menu-item">▥ Reports & Analytics</a>
+
+            <p class="menu-title">SYSTEM</p>
+
+			
+			<form th:action="@{/logout}" method="post">
+			    <button type="submit" class="menu-item"
+			            style="width:100%; border:none; cursor:pointer; text-align:left;">
+			        ↪ Logout
+			    </button>
+			</form>
+
+        </aside>
+
+        <main class="main">
+
+            <section class="welcome">
+
+                <div>
+                    <h1>Dashboard Overview</h1>
+                    <p>Welcome back! Here's what's happening in your blood bank.</p>
+                </div>
+
+                <div class="date">
+                    Blood Bank Management
+                </div>
+
+            </section>
+
+            <section class="stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <div class="stat-icon">♙</div>
+                    </div>
+
+                    <h3>Total Registered Donors</h3>
+                    <h2 th:text="${totalDonors}">0</h2>
+                    <p>Registered donor records</p>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <div class="stat-icon">🩸</div>
+                    </div>
+
+                    <h3>Available Blood Units</h3>
+                    <h2 th:text="${totalUnits}">0</h2>
+                    <p>Total available inventory</p>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <div class="stat-icon">♡</div>
+                    </div>
+
+                    <h3>Pending Requests</h3>
+                    <h2 th:text="${pendingRequests}">0</h2>
+                    <p>Requests awaiting review</p>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <div class="stat-icon">✚</div>
+                    </div>
+
+                    <h3>Total Donations</h3>
+                    <h2 th:text="${totalDonations}">0</h2>
+                    <p>Recorded donation entries</p>
+
+                </div>
+
+            </section>
+
+            <section class="content-grid">
+
+                <div class="panel">
+
+                    <h3>Blood Group Availability</h3>
+
+                    <div class="blood-groups">
+
+                        <div class="blood-item">
+                            <strong>A+</strong>
+							<span>
+							    <span th:text="${bloodSummary['A+'] ?: 0}">0</span> Units
+							</span>
+                        </div>
+
+                        <div class="blood-item">
+                            <strong>A-</strong>
+							<span>
+							    <span th:text="${bloodSummary['A-'] ?: 0}">0</span> Units
+							</span>
+                        </div>
+
+                        <div class="blood-item">
+                            <strong>B+</strong>
+							<span>
+							    <span th:text="${bloodSummary['B+'] ?: 0}">0</span> Units
+							</span>
+                        </div>
+
+                        <div class="blood-item">
+                            <strong>B-</strong>
+							<span>
+							    <span th:text="${bloodSummary['B-'] ?: 0}">0</span> Units
+							</span>
+                        </div>
+
+                        <div class="blood-item">
+                            <strong>AB+</strong>
+							<span>
+							    <span th:text="${bloodSummary['AB+'] ?: 0}">0</span> Units
+							</span>
+                        </div>
+
+                        <div class="blood-item">
+                            <strong>AB-</strong>
+							<span>
+							    <span th:text="${bloodSummary['AB-'] ?: 0}">0</span> Units
+							</span>
+                        </div>
+
+
+						<div class="blood-item">
+						    <strong>O+</strong>
+						    <span>
+						        <span th:text="${bloodSummary['O+'] ?: 0}">0</span> Units
+						    </span>
+						</div>
+
+
+                        <div class="blood-item">
+                            <strong>O-</strong>
+							<span>
+							    <span th:text="${bloodSummary['O-'] ?: 0}">0</span> Units
+							</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+				<div class="panel">
+				    <h3>Recent Activities</h3>
+
+				    <div th:if="${#lists.isEmpty(recentActivities)}">
+				        <p>No recent activities available.</p>
+				    </div>
+
+				    <div class="activity"
+				         th:each="activity : ${recentActivities}">
+
+				        <div class="activity-icon"
+				             th:if="${activity.icon == 'donation'}">&#10084;</div>
+
+				        <div class="activity-icon"
+				             th:if="${activity.icon == 'request'}">&#128203;</div>
+
+				        <div class="activity-icon"
+				             th:if="${activity.icon == 'inventory'}">&#129656;</div>
+
+				        <div class="activity-icon"
+				             th:if="${activity.icon == 'donor'}">&#128100;</div>
+
+				        <div>
+				            <p th:text="${activity.title}">Activity Title</p>
+
+				            <small th:text="${activity.description}">
+				                Activity Description
+				            </small>
+
+				            <small th:text="${activity.date}">Activity Date</small>
+				        </div>
+
+				    </div>
+				</div>
+
+
+                    
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+</html>
+

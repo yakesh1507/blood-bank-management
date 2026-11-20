@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation History</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+	<header class="header">
+
+	    <div class="logo">
+	        <div class="logo-icon">🩸</div>
+	        <h2>BLOOD<span>BANK</span></h2>
+	    </div>
+
+	    <div class="profile">
+	        <span>Administrator</span>
+	        <div class="avatar">A</div>
+	    </div>
+
+	</header>
+
+	<div class="layout">
+
+	    <aside class="sidebar">
+		<p class="menu-title">MAIN MENU</p>
+
+		<a th:href="@{/}" class="menu-item">▦ Dashboard</a>
+
+		<a th:href="@{/donors}" class="menu-item">♙ Donor Management</a>
+
+		
+
+		<a th:href="@{/inventory}" class="menu-item">🩸 Blood Inventory</a>
+
+		<a th:href="@{/requests}" class="menu-item">♡ Blood Requests</a>
+
+		<a th:href="@{/donations}" class="menu-item">▤ Donation History</a>
+
+		<p class="menu-title">ANALYTICS</p>
+
+		<a th:href="@{/reports}" class="menu-item">▥ Reports & Analytics</a>
+
+		<p class="menu-title">SYSTEM</p>
+
+		
+
+		<form th:action="@{/logout}" method="post">
+		    <button type="submit" class="menu-item"
+		            style="width:100%; border:none; cursor:pointer; text-align:left;">
+		        ↪ Logout
+		    </button>
+		</form>
+    </aside>
+
+    <main class="main">
+
+		<div class="welcome">
+		    <div>
+		        <h1>Donation History</h1>
+		        <p>Record donations and maintain donor donation records.</p>
+		    </div>
+		</div>
+
+        <div th:if="${successMessage}" class="donation-alert success"
+             th:text="${successMessage}"></div>
+
+        <div th:if="${errorMessage}" class="donation-alert error"
+             th:text="${errorMessage}"></div>
+
+        <section class="panel">
+
+            <h2>Record New Donation</h2>
+
+            <form th:action="@{/donations/add}" method="post"
+                  class="inventory-form">
+
+                <div>
+                    <label>Select Donor</label>
+                    <select name="donorId" required>
+                        <option value="">Choose Registered Donor</option>
+                        <option th:each="donor : ${donors}"
+                                th:value="${donor.donorId}"
+                                th:text="${donor.fullName + ' - ' + donor.bloodGroup}">
+                        </option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Units Donated</label>
+                    <input type="number" name="unitsDonated"
+                           min="1" required>
+                </div>
+
+                <div>
+                    <label>Donation Date</label>
+                    <input type="date" name="donationDate"
+                           th:value="${today}" required>
+                </div>
+
+                <div>
+                    <label>Expiry Date</label>
+                    <input type="date" name="expiryDate"
+                           th:attr="min=${today}, max=${null}" required>
+                </div>
+
+                <button type="submit">Record Donation</button>
+
+            </form>
+
+        </section>
+
+        <section class="panel">
+
+            <h2>All Donation Records</h2>
+
+            <table class="inventory-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Donor Name</th>
+                        <th>Blood Group</th>
+                        <th>Units Donated</th>
+                        <th>Donation Date</th>
+                        <th>Expiry Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr th:each="donation : ${donationList}">
+                        <td th:text="${donation.donationId}"></td>
+                        <td th:text="${donation.donorName}"></td>
+                        <td th:text="${donation.bloodGroup}"></td>
+                        <td th:text="${donation.unitsDonated}"></td>
+                        <td th:text="${donation.donationDate}"></td>
+                        <td th:text="${donation.expiryDate}"></td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(donationList)}">
+                        <td colspan="6" class="empty-message">
+                            No donation records available yet.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+		</main>
+
+		</div>
+
+		</body>
+		</html>

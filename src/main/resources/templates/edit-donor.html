@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Donor</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+    <header class="header">
+
+        <div class="logo">
+            <div class="logo-icon">🩸</div>
+            <h2>BLOOD<span>BANK</span></h2>
+        </div>
+
+        <div class="profile">
+            <div><strong>Administrator</strong></div>
+            <div class="avatar">A</div>
+        </div>
+
+    </header>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <p class="menu-title">MAIN MENU</p>
+
+            <a href="/" class="menu-item">▦ Dashboard</a>
+            <a href="/donors" class="menu-item active">♙ Donor Management</a>
+          
+			<a href="/inventory" class="menu-item">🩸 Blood Inventory</a>
+			<a href="/requests" class="menu-item">♡ Blood Requests</a>
+			<a href="/donations" class="menu-item">▤ Donation History</a>
+
+            <p class="menu-title">ANALYTICS</p>
+
+            <a th:href="@{/reports}" class="menu-item">▥ Reports & Analytics</a>
+
+            <p class="menu-title">SYSTEM</p>
+
+            
+			<form th:action="@{/logout}" method="post">
+			    <button type="submit" class="menu-item"
+			            style="width:100%; border:none; cursor:pointer; text-align:left;">
+			        ↪ Logout
+			    </button>
+			</form>
+
+        </aside>
+
+        <main class="main">
+
+            <section class="welcome">
+
+                <div>
+                    <h1>Edit Donor</h1>
+
+					<div th:if="${successMessage}"
+					     style="background:#d1fae5; color:#065f46; padding:12px; border-radius:8px; margin:15px 0;">
+					    <span th:text="${successMessage}"></span>
+					</div>
+
+					<div th:if="${errorMessage}"
+					     style="background:#fee2e2; color:#991b1b; padding:12px; border-radius:8px; margin:15px 0;">
+					    <span th:text="${errorMessage}"></span>
+					</div>
+
+                    <p>Update the registered donor's information.</p>
+                </div>
+
+            </section>
+
+            <section class="panel donor-form-panel">
+
+                <h2>Update Donor Information</h2>
+
+                <p>Modify the donor details below and save your changes.</p>
+
+                <form class="donor-form"
+                      th:action="@{/donors/update/{id}(id=${donor.donorId})}"
+                      method="post">
+
+                    <div class="form-grid">
+
+                        <div>
+                            <label>Full Name</label>
+                            <input type="text" name="fullName"
+                                   th:value="${donor.fullName}" required>
+                        </div>
+
+                        <div>
+                            <label>Age</label>
+                            <input type="number" name="age"
+                                   th:value="${donor.age}" required>
+                        </div>
+
+                        <div>
+                            <label>Gender</label>
+                            <select name="gender" required>
+                                <option value="Male"
+                                    th:selected="${donor.gender == 'Male'}">Male</option>
+                                <option value="Female"
+                                    th:selected="${donor.gender == 'Female'}">Female</option>
+                                <option value="Other"
+                                    th:selected="${donor.gender == 'Other'}">Other</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Blood Group</label>
+                            <select name="bloodGroup" required>
+                                <option value="A+" th:selected="${donor.bloodGroup == 'A+'}">A+</option>
+                                <option value="A-" th:selected="${donor.bloodGroup == 'A-'}">A-</option>
+                                <option value="B+" th:selected="${donor.bloodGroup == 'B+'}">B+</option>
+                                <option value="B-" th:selected="${donor.bloodGroup == 'B-'}">B-</option>
+                                <option value="AB+" th:selected="${donor.bloodGroup == 'AB+'}">AB+</option>
+                                <option value="AB-" th:selected="${donor.bloodGroup == 'AB-'}">AB-</option>
+                                <option value="O+" th:selected="${donor.bloodGroup == 'O+'}">O+</option>
+                                <option value="O-" th:selected="${donor.bloodGroup == 'O-'}">O-</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Phone Number</label>
+                            <input type="tel" name="phoneNumber"
+                                   th:value="${donor.phoneNumber}" required>
+                        </div>
+
+                        <div>
+                            <label>Email Address</label>
+                            <input type="email" name="email"
+                                   th:value="${donor.email}">
+                        </div>
+
+                        <div>
+                            <label>City</label>
+                            <input type="text" name="city"
+                                   th:value="${donor.city}" required>
+                        </div>
+
+                        <div>
+                            <label>Last Donation Date</label>
+                            <input type="date" name="lastDonationDate"
+                                   th:value="${donor.lastDonationDate}">
+                        </div>
+
+                    </div>
+
+                    <button type="submit">Update Donor</button>
+
+                    <a href="/donors" class="delete-btn"
+                       style="margin-left: 10px; padding: 14px 20px;">
+                        Cancel
+                    </a>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

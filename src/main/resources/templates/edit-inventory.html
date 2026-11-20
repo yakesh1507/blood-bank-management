@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Blood Inventory</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">
+        <div class="logo-icon">&#129656;</div>
+        <h2>BLOOD<span>BANK</span></h2>
+    </div>
+    <div class="profile">
+        <strong>Administrator</strong>
+        <div class="avatar">A</div>
+    </div>
+</header>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <p class="menu-title">MAIN MENU</p>
+        <a th:href="@{/}" class="menu-item">▦ Dashboard</a>
+        <a th:href="@{/donors}" class="menu-item">♙ Donor Management</a>
+        <a th:href="@{/inventory}" class="menu-item active">🩸 Blood Inventory</a>
+        <a th:href="@{/requests}" class="menu-item">♡ Blood Requests</a>
+        <a th:href="@{/donations}" class="menu-item">▤ Donation History</a>
+
+        <p class="menu-title">ANALYTICS</p>
+        <a th:href="@{/reports}" class="menu-item">▥ Reports & Analytics</a>
+
+        <p class="menu-title">SYSTEM</p>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="menu-item"
+                    style="width:100%; border:none; cursor:pointer; text-align:left;">
+                ↪ Logout
+            </button>
+        </form>
+    </aside>
+
+    <main class="main">
+
+        <section class="welcome">
+            <div>
+                <h1>Edit Blood Stock</h1>
+                <p>Update the selected blood inventory record.</p>
+            </div>
+        </section>
+
+        <section class="panel inventory-form-panel">
+
+            <h2>Inventory Details</h2>
+
+            <form class="inventory-form"
+                  th:action="@{/inventory/update/{id}(id=${inventory.inventoryId})}"
+                  th:object="${inventory}"
+                  method="post">
+
+                <div class="form-grid">
+
+                    <div>
+                        <label>Blood Group</label>
+                        <select th:field="*{bloodGroup}" required>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Units Available</label>
+                        <input type="number"
+                               th:field="*{unitsAvailable}"
+                               min="1" required>
+                    </div>
+
+                    <div>
+                        <label>Collection Date</label>
+                        <input type="date"
+                               th:field="*{collectionDate}"
+                               required>
+                    </div>
+
+                    <div>
+                        <label>Expiry Date</label>
+                        <input type="date"
+                               th:field="*{expiryDate}"
+                               required>
+                    </div>
+
+                </div>
+
+                <button type="submit">Update Blood Stock</button>
+
+                <a th:href="@{/inventory}" class="menu-item">
+                    Cancel
+                </a>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
